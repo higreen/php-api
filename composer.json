@@ -1,23 +1,31 @@
 {
     "name": "higreen/php-api",
-	"type": "library",
+    "type": "library",
     "description": "第三方服务，接口封装。",
-	"keywords": ["微信接口","支付宝接口","阿里云接口","腾讯云接口","百度云接口"],
+    "keywords": [
+        "微信接口",
+        "支付宝接口",
+        "阿里云接口",
+        "腾讯云接口",
+        "百度云接口"
+    ],
     "license": "MIT",
-	"version": "1.0.0",
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"authors": [
+    "version": "1.0.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
         {
             "name": "green",
             "email": "hi_gr@qq.com"
         }
     ],
-	"require": {
+    "require": {
         "php": "^7.0|^8.0"
     },
     "autoload": {
-	    "files": ["app/helpers.php"],
+        "files": [
+            "app/helpers.php"
+        ],
         "psr-4": {
             "Higreen\\Api\\": "src/"
         }
