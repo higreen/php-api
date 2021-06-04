@@ -7,7 +7,7 @@
 ## Installation
 
 ``` bash
-composer require higreen/phpapi
+composer require higreen/php-api
 ```
 
 ## Features
