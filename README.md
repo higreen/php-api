@@ -1,7 +1,7 @@
 # PHP Api
 ![php-badge](https://img.shields.io/badge/php-%3E%3D%207-8892BF.svg)
-[![packagist-badge](http://img.higreen.top/phpapi.svg)](https://packagist.org/packages/higreen/phpapi)
-[![Total Downloads](https://poser.pugx.org/higreen/phpapi/downloads)](https://packagist.org/packages/higreen/phpapi)  
+[![packagist-badge](http://img.higreen.top/phpapi.svg)](https://packagist.org/packages/higreen/php-api)
+[![Total Downloads](https://poser.pugx.org/higreen/php-api/downloads)](https://packagist.org/packages/higreen/php-api)  
 第三方服务，接口封装。
 
 ## Installation
@@ -22,7 +22,7 @@ composer require higreen/phpapi
     + [小程序-内容安全](#weixin-mini-security)
         - 校验一张图片
         - 校验一段文本
-    + [公众号](#weixin-Offi)
+    + [公众号](#weixin-offi)
         - 登录凭证校验
         - 获取接口调用凭据
         - 获取微信JS接口的临时票据
@@ -122,11 +122,11 @@ use Higreen\Api\Weixin\MiniSecurity;
 
 1. 校验一张图片
     ```php
-    $bool = $MiniSecurity::checkImg($access_token, '图片链接');
+    $bool = MiniSecurity::checkImg($access_token, '图片链接');
     ```
 2. 检查一段文本
     ```php
-    $bool = $MiniSecurity::checkText($access_token, '文字内容');
+    $bool = MiniSecurity::checkText($access_token, '文字内容');
     ```
 
 <!-- tocstop -->
