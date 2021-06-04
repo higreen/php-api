@@ -14,10 +14,10 @@ class MiniSecurity
      * 校验一张图片是否含有违法违规内容
      *
      * @param  string $access_token [接口调用凭证]
-     * @param  string $contents     [图片二进制内容]
+     * @param  string $media        [媒体文件数据]
      * @return bool
      */
-    public static function checkImg($access_token, $contents)
+    public static function checkImg($access_token, $media)
     {
         $url = 'https://api.weixin.qq.com/wxa/img_sec_check?access_token=' . $access_token;
 
@@ -25,7 +25,7 @@ class MiniSecurity
         $response = Http::post([
             'url' => $url,
             'data' => [
-                'media' => file_get_contents($src),
+                'media' => $media,
             ],
             'data_type' => 'form',
         ]);

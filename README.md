@@ -22,6 +22,13 @@ composer require higreen/php-api
     + [小程序-内容安全](#weixin-mini-security)
         - 校验一张图片
         - 校验一段文本
+    + [小程序-图片识别](#weixin-mini-ocr)
+        - 银行卡
+        - 营业执照
+        - 驾驶证
+        - 身份证
+        - 通用印刷体
+        - 行驶证
     + [公众号](#weixin-offi)
         - 登录凭证校验
         - 获取接口调用凭据
@@ -127,6 +134,44 @@ use Higreen\Api\Weixin\MiniSecurity;
 2. 检查一段文本
     ```php
     $bool = MiniSecurity::checkText($access_token, '文字内容');
+    ```
+
+<!-- tocstop -->
+
+</details>
+
+<details>
+  <summary><b id="weixin-mini-ocr">小程序-图片识别</b></summary>
+
+<!-- toc -->
+
+```php
+use Higreen\Api\Weixin\MiniOcr;
+```
+
+1. 银行卡
+    ```php
+    $res = MiniOcr::bankcard($access_token, '图片链接');
+    ```
+2. 营业执照
+    ```php
+    $res = MiniOcr::businessLicense($access_token, '图片链接');
+    ```
+3. 驾驶证
+    ```php
+    $res = MiniOcr::driverLicense($access_token, '图片链接');
+    ```
+4. 身份证
+    ```php
+    $res = MiniOcr::idcard($access_token, '图片链接');
+    ```
+5. 通用印刷体
+    ```php
+    $res = MiniOcr::printedText($access_token, '图片链接');
+    ```
+6. 行驶证
+    ```php
+    $res = MiniOcr::vehicleLicense($access_token, '图片链接');
     ```
 
 <!-- tocstop -->
