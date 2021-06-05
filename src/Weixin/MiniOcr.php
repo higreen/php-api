@@ -105,6 +105,7 @@ class MiniOcr
         // 发送请求
         $response = Http::post([
             'url' => $url,
+            'data_type' => 'raw',
         ]);
 
         // 检测响应
