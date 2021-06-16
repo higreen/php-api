@@ -13,16 +13,15 @@ class Kodo extends Base
     /**
      * 获取上传凭证
      *
-     * @param array $config [
-     * scope    [str] [必填] [目标资源空间 Bucket]
-     * callback [str] [可选] [回调地址]
-     * ]
+     * @param array $params
+     *  scope    [str] [必填] [目标资源空间 Bucket]
+     *  callback [str] [可选] [回调地址]
      * @return string
      */
-    public function getUploadToken($config)
+    public function getUploadToken($params)
     {
         $data = [
-            'scope' => $config['scope'],
+            'scope' => $params['scope'],
             'callbackBodyType' => 'application/json',
             'callbackBody' => '{
                 "bucket": "$(bucket)",
@@ -56,7 +55,7 @@ class Kodo extends Base
      * @param  string $key    [文件名]
      * @return string
      */
-    public function delete(string $bucket, string $key)
+    public function delete($bucket, $key)
     {
         $protocol = 'http://';
         $host = 'rs.qbox.me';
@@ -82,7 +81,7 @@ class Kodo extends Base
      * @param  string $content_type [内容类型]
      * @return string
      */
-    public function getAuthorization(string $path, string $host)
+    public function getAuthorization($path, $host)
     {
         $sign_str = "POST {$path}";
         $sign_str .= "\nHost: {$host}";
@@ -97,10 +96,10 @@ class Kodo extends Base
     /**
      * 编码URL
      *
-     * @param  str $str [被编码的字符串]
-     * @return str
+     * @param  string $str [被编码的字符串]
+     * @return string
      */
-    private function encodeUrl(string $str)
+    private function encodeUrl($str)
     {
         return str_replace(['+', '/'], ['-', '_'], base64_encode($str));
     }
