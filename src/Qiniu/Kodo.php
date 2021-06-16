@@ -5,7 +5,7 @@ namespace Higreen\Api\Qiniu;
 use Higreen\Api\Http;
 
 /**
- * 七牛云海量存储系统
+ * 七牛云对象存储
  * 文档地址：https://developer.qiniu.com/kodo/api/3939/
  */
 class Kodo extends Base
@@ -13,17 +13,16 @@ class Kodo extends Base
     /**
      * 获取上传凭证
      *
-     * @param  array $config [
+     * @param array $config [
      * scope    [str] [必填] [目标资源空间 Bucket]
      * callback [str] [可选] [回调地址]
      * ]
      * @return string
      */
-    public function getUploadToken(array $config)
+    public function getUploadToken($config)
     {
         $data = [
             'scope' => $config['scope'],
-            'callbackUrl' => $config['callback'],
             'callbackBodyType' => 'application/json',
             'callbackBody' => '{
                 "bucket": "$(bucket)",
@@ -35,6 +34,12 @@ class Kodo extends Base
             }',
             'deadline' => time() + 3600,
         ];
+
+        // 可选参数
+        if (isset($params['callback'])) {
+            $data['callbackUrl'] = $params['callback'];
+        }
+
         $data = json_encode($data);
         $data = $this->encodeUrl($data);
         $sign = hash_hmac('sha1', $data, $this->secret_key, true);
@@ -99,5 +104,4 @@ class Kodo extends Base
     {
         return str_replace(['+', '/'], ['-', '_'], base64_encode($str));
     }
-
 }
