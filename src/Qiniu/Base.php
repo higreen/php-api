@@ -5,11 +5,11 @@ namespace Higreen\Api\Qiniu;
 /**
  * 基类
  */
-class Base extends AnotherClass
+class Base
 {
     // 应用秘钥
-    private $access_key = '';
-    private $secret_key = '';
+    protected $access_key = '';
+    protected $secret_key = '';
 
     /**
      * @param array $init

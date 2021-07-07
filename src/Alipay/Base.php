@@ -17,6 +17,8 @@ class Base
     protected $request_body = [];
 
     /**
+     * Constructor
+     * 
      * @param array $init
      *  app_id       [str] [必填] [支付宝分配给开发者的应用ID]
      *  app_key      [str] [必填] [应用密钥]
@@ -37,14 +39,14 @@ class Base
         $this->app_key = $init['app_key'];
         $this->request_body = [
             'app_id'      => $init['app_id'],
+            'biz_content' => '',
+            'charset'     => 'UTF-8',
             'method'      => '',
-            'charset'     => 'utf-8',
-            'sign_type'   => 'RSA2',
+            'notify_url'  => $init['notify_url'],
             'sign'        => '',
+            'sign_type'   => 'RSA2',
             'timestamp'   => date('Y-m-d H:i:s'),
             'version'     => '1.0',
-            'notify_url'  => $init['notify_url'],
-            'biz_content' => '',
         ];
     }
 
@@ -59,17 +61,17 @@ class Base
         $params = array_filter($params);
         ksort($params);
 
+        // The string of data you wish to sign
         $data = '';
         foreach ($params as $key => $val) {
             $data .= "{$key}={$val}&";
         }
         $data = rtrim($data, '&');
 
-        $priv_key_id = "-----BEGIN RSA PRIVATE KEY-----\n" .
-            wordwrap($this->app_key, 64, "\n", true) .
-            "\n-----END RSA PRIVATE KEY-----";
-
-        openssl_sign($data, $signature, $priv_key_id, OPENSSL_ALGO_SHA256);
+        // Generate signature
+        $private_key = wordwrap($this->app_key, 64, "\n", true);
+        $private_key = "-----BEGIN RSA PRIVATE KEY-----\n{$private_key}\n-----END RSA PRIVATE KEY-----";
+        openssl_sign($data, $signature, $private_key, OPENSSL_ALGO_SHA256);
 
         return base64_encode($signature);
     }
@@ -77,28 +79,27 @@ class Base
     /**
      * 验证签名
      *
-     * @param  array  $params     [回调请求参数]
-     * @param  string $public_key [支付宝公钥]
+     * @param  array  $params     回调请求参数
+     * @param  string $public_key 支付宝公钥
      * @return bool
      */
     public static function checkSignature($params, $public_key)
     {
-        $sign = str_replace(' ', '+', $params['sign']);
-        $signature = base64_decode($sign);
+        $signature = base64_decode($params['sign']);
         unset($params['sign'], $params['sign_type']);
         ksort($params);
 
+        // The string of data used to generate the signature previously
         $data = '';
         foreach ($params as $key => $val) {
             $data .= "{$key}={$val}&";
         }
         $data = rtrim($data, '&');
 
-        $pub_key_id = "-----BEGIN PUBLIC KEY-----\n" .
-            wordwrap($public_key, 64, "\n", true) .
-            "\n-----END PUBLIC KEY-----";
-
-        $res = openssl_verify($data, $signature, $pub_key_id, OPENSSL_ALGO_SHA256);
+        // Verify signature
+        $public_key = wordwrap($public_key, 64, "\n", true);
+        $public_key = "-----BEGIN PUBLIC KEY-----\n{$public_key}\n-----END PUBLIC KEY-----";
+        $res = openssl_verify($data, $signature, $public_key, OPENSSL_ALGO_SHA256);
 
         return $res === 1;
     }

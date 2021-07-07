@@ -15,11 +15,13 @@ class Kodo extends Base
      *
      * @param array $params
      *  scope    [str] [必填] [目标资源空间 Bucket]
+     *  expiry   [int] [可选] [过期,单位秒]
      *  callback [str] [可选] [回调地址]
      * @return string
      */
     public function getUploadToken($params)
     {
+        $time = time();
         $data = [
             'scope' => $params['scope'],
             'callbackBodyType' => 'application/json',
@@ -31,12 +33,15 @@ class Kodo extends Base
                 "size": "$(fsize)",
                 "category": "$(x:category)"
             }',
-            'deadline' => time() + 3600,
+            'deadline' => $time + 3600,
         ];
 
         // 可选参数
         if (isset($params['callback'])) {
             $data['callbackUrl'] = $params['callback'];
+        }
+        if (isset($params['expiry'])) {
+            $data['deadline'] = $time + $params['expiry'];
         }
 
         $data = json_encode($data);
