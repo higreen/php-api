@@ -79,19 +79,35 @@ class Base
     /**
      * 验证签名
      *
-     * @param  array  $params     回调请求参数
      * @param  string $public_key 支付宝公钥
-     * @return bool
+     * @return array 验证成功返回请求参数
      */
-    public static function checkSignature($params, $public_key)
+    public static function checkSignature($public_key)
     {
-        $signature = base64_decode($params['sign']);
-        unset($params['sign'], $params['sign_type']);
-        ksort($params);
+        // 获取请求参数
+        $input = file_get_contents('php://input');
+        if (!$input) return [];
+
+        // 格式化请求参数
+        $data = explode('&', $input);
+        $input = [];
+        foreach ($data as $i) {
+            $i = explode('=', $i);
+            if (count($i) === 2) {
+                $input[$i[0]] = urldecode($i[1]);
+            }
+        }
+        if (!$input) return [];
+        if ($input['trade_status'] !== 'TRADE_SUCCESS') return [];
+
+        // 提取签名
+        $signature = base64_decode($input['sign']);
+        unset($input['sign'], $input['sign_type']);
+        ksort($input);
 
         // The string of data used to generate the signature previously
         $data = '';
-        foreach ($params as $key => $val) {
+        foreach ($input as $key => $val) {
             $data .= "{$key}={$val}&";
         }
         $data = rtrim($data, '&');
@@ -101,6 +117,6 @@ class Base
         $public_key = "-----BEGIN PUBLIC KEY-----\n{$public_key}\n-----END PUBLIC KEY-----";
         $res = openssl_verify($data, $signature, $public_key, OPENSSL_ALGO_SHA256);
 
-        return $res === 1;
+        return $res === 1 ? $input : [];
     }
 }

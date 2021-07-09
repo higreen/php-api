@@ -362,9 +362,22 @@ $Pay = new Pay($init);
 ```
 
 1. APP支付
-    `$res = $Pay->app($params);`
+    ```php
+    $res = $Pay->app([
+        'subject'      => '交易标题',
+        'out_trade_no' => '商户订单号',
+        'total_amount' => '订单总金额，单位为人民币（元）',
+    ]);
+    ```
 2. 小程序支付
-    `$res = $Pay->mini($params);`
+    ```php
+    $res = $Pay->mini([
+        'subject'      => '交易标题',
+        'out_trade_no' => '商户订单号',
+        'total_amount' => '订单总金额，单位为人民币（元）',
+        'buyer_id'     => '支付宝用户的唯一userId',
+    ]);
+    ```
 3. 扫码支付
     ```php
     $res = $Pay->qrcode([
@@ -373,8 +386,8 @@ $Pay = new Pay($init);
         'total_amount' => '订单总金额，单位为人民币（元）',
     ]);
     ```
-4. 回调数据验证签名
-    `$res = Pay::checkSignature($params, '支付宝公钥');`
+4. 支付回调数据验证签名，验证成功返回请求参数
+    `$res = Pay::checkSignature('支付宝公钥');`
 
 <!-- tocstop -->
 

@@ -63,8 +63,8 @@ class Transfer extends Base
         $data['sign'] = $this->getSignature($data);
 
         // 发送请求
-        $response = Curl::get([
-            'url' => URL,
+        $response = Http::get([
+            'url' => $this->url,
             'data' => $data,
         ]);
 

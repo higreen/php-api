@@ -32,8 +32,6 @@ class Pay extends Base
             'subject' => $params['subject'],
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['total_amount'],
-            'product_code' => 'QUICK_MSECURITY_PAY',
-            'passback_params' => 'pay',
         ];
 
         // 可选参数
@@ -45,7 +43,7 @@ class Pay extends Base
         }
 
         // 获取签名
-        $data['biz_content'] = json_encode($biz_content);
+        $data['biz_content'] = json_encode($biz_content, JSON_UNESCAPED_UNICODE);
         $data['sign'] = $this->getSignature($data);
 
         return http_build_query($data);
@@ -137,7 +135,8 @@ class Pay extends Base
             return $response['alipay_trade_precreate_response']['qr_code'];
         }
 
-		$response = mb_convert_encoding($response, 'UTF-8', 'gbk');
+        // 抛出错误异常
+		$response = mb_convert_encoding($response, 'UTF-8', 'GBK');
         $response = json_decode($response, true);
         throw new \Exception($response['alipay_trade_precreate_response']['sub_msg'], 555);
     }
