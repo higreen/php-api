@@ -18,7 +18,7 @@ class Pay
     /**
      * @param array $init
      *  mch_id      [str] [必填] [商户ID]
-     *  mch_key     [str] [必填] [商户密钥]
+     *  mch_key_v3  [str] [必填] [商户密钥V3]
      *  sslcert     [str] [必填] [证书路径]
      *  sslkey      [str] [必填] [证书密钥路径]
      */
@@ -26,15 +26,15 @@ class Pay
     {
         if (empty($init['mch_id']))
             throw new \Exception('I need the mch_id');
-        if (empty($init['mch_key']))
-            throw new \Exception('I need the mch_key');
+        if (empty($init['mch_key_v3']))
+            throw new \Exception('I need the mch_key_v3');
         if (empty($init['sslcert']) || !file_exists($init['sslcert']))
             throw new \Exception('I need the sslcert');
         if (empty($init['sslkey']) || !file_exists($init['sslkey']))
             throw new \Exception('I need the sslkey');
 
         $this->mch_id     = $init['mch_id'];
-        $this->mch_key    = $init['mch_key'];
+        $this->mch_key    = $init['mch_key_v3'];
         $this->sslcert    = $init['sslcert'];
         $this->sslkey     = $init['sslkey'];
     }

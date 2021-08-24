@@ -7,8 +7,23 @@ use Higreen\Api\Http;
 /**
  * 微信转账
  */
-class Transfer extends Base
+class Transfer
 {
+    public $app_id;// 应用ID
+    public $mch_id;// 商户号
+    public $mch_key;// 商户秘钥
+    public $sslcert;// 证书路径
+    public $sslkey;
+
+    public function __construct($init)
+    {
+        $this->app_id = $init['app_id'];
+        $this->mch_id = $init['mch_id'];
+        $this->mch_key = $init['mch_key'];
+        $this->sslcert = $init['sslcert'];
+        $this->sslkey = $init['sslkey'];
+    }
+
     /**
      * 付款到零钱
      * 文档：https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2
@@ -47,7 +62,6 @@ class Transfer extends Base
         }
 
         // 获取签名
-        $data = array_filter($data);
         $data['sign'] = $this->getSignature($data);
 
         // 发送请求
@@ -79,4 +93,22 @@ class Transfer extends Base
      * @return array
      */
     public function bank($params) {}
+
+    // 获取签名
+    public function getSignature($params)
+    {
+        $params = array_filter($params);
+        ksort($params);
+
+        // 拼接签名参数
+        $signature = '';
+        foreach ($params as $key => $val) {
+            $signature .= "{$key}={$val}&";
+        }
+        $signature .= "key={$this->mch_key}";
+
+        $signature = strtoupper(md5($signature));
+
+        return $signature;
+    }
 }

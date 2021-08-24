@@ -249,7 +249,7 @@ use Higreen\Api\Weixin\Pay;
 
 $Pay = new Pay([
     'mch_id'     => '商户ID',
-    'mch_key'    => '商户密钥',
+    'mch_key_v3' => '商户密钥V3',
     'sslcert'    => '证书路径',
     'sslkey'     => '证书密钥路径',
 ]);
@@ -307,10 +307,9 @@ $Pay = new Pay([
 use Higreen\Api\Weixin\Transfer;
 
 $Transfer = new Transfer([
+    'app_id'     => '应用ID',
     'mch_id'     => '商户ID',
     'mch_key'    => '商户密钥',
-    'app_id'     => '应用ID',
-    'notify_url' => '回调地址',
     'sslcert'    => '证书路径',
     'sslkey'     => '证书密钥路径',
 ]);
@@ -321,7 +320,7 @@ $Transfer = new Transfer([
         'partner_trade_no' => '[str] [必填] [商户订单号]',
         'openid'           => '[str] [必填] [用户openid]',
         'amount'           => '[int] [必填] [企业付款金额，单位为分]',
-        'desc'             => '[str] [可选] [企业付款备注]',
+        'desc'             => '[str] [必填] [企业付款备注]',
         're_user_name'     => '[str] [可选] [收款用户姓名]',
     ]);
     ```

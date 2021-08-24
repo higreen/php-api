@@ -94,6 +94,10 @@ class Offi
      */
     public static function getJsapiConfig($ticket, $url = '')
     {
+        if (!$url || empty($_SERVER['HTTP_REFERER'])) {
+            throw new \Exception('缺少当前网页的URL', 555);
+        }
+
         $params = [
             'jsapi_ticket' => $ticket,
             'noncestr' => rand(),
