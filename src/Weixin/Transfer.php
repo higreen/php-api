@@ -9,7 +9,6 @@ use Higreen\Api\Http;
  */
 class Transfer
 {
-    public $app_id;// 应用ID
     public $mch_id;// 商户号
     public $mch_key;// 商户秘钥
     public $sslcert;// 证书路径
@@ -17,7 +16,6 @@ class Transfer
 
     public function __construct($init)
     {
-        $this->app_id = $init['app_id'];
         $this->mch_id = $init['mch_id'];
         $this->mch_key = $init['mch_key'];
         $this->sslcert = $init['sslcert'];
@@ -30,6 +28,7 @@ class Transfer
      *
      * @param  array  $params [
      * partner_trade_no [str] [必填] [商户订单号]
+     * mch_appid        [str] [必填] [商户账号appid]
      * openid           [str] [必填] [用户openid]
      * amount           [int] [必填] [企业付款金额，单位为分]
      * desc             [str] [必填] [企业付款备注]
@@ -41,7 +40,7 @@ class Transfer
     {
         // 请求参数
         $data = [
-            'mch_appid'         => $this->app_id,
+            'mch_appid'         => $params['mch_appid'],
             'mchid'             => $this->mch_id,
             'device_info'       => '',
             'nonce_str'         => rand(),
