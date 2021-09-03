@@ -307,7 +307,6 @@ $Pay = new Pay([
 use Higreen\Api\Weixin\Transfer;
 
 $Transfer = new Transfer([
-    'app_id'     => '应用ID',
     'mch_id'     => '商户ID',
     'mch_key'    => '商户密钥',
     'sslcert'    => '证书路径',
@@ -318,13 +317,13 @@ $Transfer = new Transfer([
     ```php
     $res = $Transfer->balance([
         'partner_trade_no' => '[str] [必填] [商户订单号]',
+        'mch_appid'        => '[str] [必填] [商户账号appid]',
         'openid'           => '[str] [必填] [用户openid]',
         'amount'           => '[int] [必填] [企业付款金额，单位为分]',
         'desc'             => '[str] [必填] [企业付款备注]',
         're_user_name'     => '[str] [可选] [收款用户姓名]',
     ]);
     ```
-2. 到银行卡
 
 <!-- tocstop -->
 

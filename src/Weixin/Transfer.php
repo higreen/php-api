@@ -85,14 +85,6 @@ class Transfer
         }
     }
 
-    /**
-     * 付款到银行卡
-     *
-     * @param  array  $params [请求参数]
-     * @return array
-     */
-    public function bank($params) {}
-
     // 获取签名
     public function getSignature($params)
     {
