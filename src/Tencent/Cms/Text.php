@@ -42,7 +42,7 @@ class Text
                 'X-TC-Version: 2020-12-29',
             ],
         ]);
- 
+
         if (!empty($response['Response']['Error']['Message'])) {
             throw new \Exception($response['Response']['Error']['Message'], 555);
         }
@@ -61,7 +61,7 @@ class Text
         $HTTPRequestMethod = $method;
         $CanonicalURI = '/';
         $CanonicalQueryString = '';
-        $CanonicalHeaders = "content-type:application/json\nhost:{$host}\n";
+        $CanonicalHeaders = "content-type:application/json; charset=utf-8\nhost:{$host}\n";
         $SignedHeaders = "content-type;host";
         $HashedRequestPayload = hash('SHA256', json_encode($data));
         $CanonicalRequest = "{$HTTPRequestMethod}\n{$CanonicalURI}\n{$CanonicalQueryString}\n{$CanonicalHeaders}\n{$SignedHeaders}\n{$HashedRequestPayload}";
