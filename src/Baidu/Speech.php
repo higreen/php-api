@@ -12,17 +12,21 @@ class Speech extends Base
 {
 
     /**
+     * Create a new instance.
+     * 
      * @param array $init
      *  api_key    [str] [必填] [应用公钥]
      *  secret_key [str] [必填] [应用密钥]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
         if (empty($init['api_key'])) {
-            throw new \Exception('I need the "api_key"');
+            throw new \Exception('I need the api_key');
         }
         if (empty($init['secret_key'])) {
-            throw new \Exception('I need the "secret_key"');
+            throw new \Exception('I need the secret_key');
         }
 
         $this->api_key    = $init['api_key'];
@@ -81,7 +85,7 @@ class Speech extends Base
         if (empty($response['err_no'])) {
             return $response;
         } else {
-            throw new \Exception($response['err_msg'], 555);
+            throw new \ErrorException($response['err_msg'], 555);
         }
     }
 }

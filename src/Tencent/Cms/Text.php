@@ -13,10 +13,19 @@ class Text
     private $secret_id;
     private $secret_key;
 
-    public function __construct($secret_id, $secret_key)
+    /**
+     * Create a new instance.
+     * 
+     * @param array $init [
+     *  secret_id   [str] [必填] [密钥ID]
+     *  secret_key  [str] [必填] [密钥KEY]
+     * ]
+     * @return void
+     */
+    public function __construct($init)
     {
-        $this->secret_id = $secret_id;
-        $this->secret_key = $secret_key;
+        $this->secret_id = $init['secret_id'];
+        $this->secret_key = $init['secret_key'];
     }
 
     public function check($content)
@@ -44,7 +53,7 @@ class Text
         ]);
 
         if (!empty($response['Response']['Error']['Message'])) {
-            throw new \Exception($response['Response']['Error']['Message'], 555);
+            throw new \ErrorException($response['Response']['Error']['Message'], 555);
         }
 
         return $response['Response']['Suggestion'] === 'Pass';

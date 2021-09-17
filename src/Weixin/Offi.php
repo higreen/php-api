@@ -13,9 +13,13 @@ class Offi
     public $app_secret;
 
     /**
-     * @param array $init
+     * Create a new instance.
+     * 
+     * @param array $init [
      *  app_id     [str] [必填] [AppID(公众号ID)]
      *  app_secret [str] [必填] [AppSecret(公众号密钥)]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
@@ -49,7 +53,7 @@ class Offi
 		]);
 		
 		if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response;
@@ -73,7 +77,7 @@ class Offi
 		]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response['access_token'];
@@ -95,7 +99,7 @@ class Offi
     public static function getJsapiConfig($ticket, $url = '')
     {
         if (!$url || empty($_SERVER['HTTP_REFERER'])) {
-            throw new \Exception('缺少当前网页的URL', 555);
+            throw new \ErrorException('缺少当前网页的URL', 555);
         }
 
         $params = [
@@ -130,7 +134,7 @@ class Offi
         ]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response['ticket'];
@@ -156,7 +160,7 @@ class Offi
         ]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response;
@@ -177,7 +181,7 @@ class Offi
         ]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return empty($response['subscribe']);
@@ -214,7 +218,7 @@ class Offi
         ]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response;

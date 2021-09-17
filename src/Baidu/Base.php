@@ -39,7 +39,7 @@ class Base
         if (empty($response['error'])) {
             return $response['access_token'];
         } else {
-            throw new \Exception($response['error_description']);
+            throw new \ErrorException($response['error_description'], 555);
         }
     }
 

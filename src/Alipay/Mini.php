@@ -32,7 +32,7 @@ class Mini extends Base
             'data' => $data,
         ]);
         if (!empty($response['error_response']) && !empty($response['error_response']['sub_msg'])) {
-            throw new \Exception($response['error_response']['sub_msg'], 555);
+            throw new \ErrorException($response['error_response']['sub_msg'], 555);
         }
 
         return $response['alipay_system_oauth_token_response']['user_id'];

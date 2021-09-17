@@ -16,11 +16,15 @@ class Pay
     public $sslkey;
 
     /**
-     * @param array $init
+     * Create a new instance.
+     * 
+     * @param array $init [
      *  mch_id      [str] [必填] [商户ID]
      *  mch_key_v3  [str] [必填] [商户密钥V3]
      *  sslcert     [str] [必填] [证书路径]
      *  sslkey      [str] [必填] [证书密钥路径]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
@@ -84,7 +88,7 @@ class Pay
             case 'native':
                 break;
             default:
-                throw new \Exception('未定义的交易类型', 555);
+                throw new \ErrorException('未定义的交易类型', 555);
                 break;
         }
 
@@ -111,7 +115,7 @@ class Pay
         if (!empty($response['prepay_id'])) {
             return $this->_getPayment($trade_type, $response, $params['appid']);
         } else {
-            throw new \Exception($response['message'], 555);
+            throw new \ErrorException($response['message'], 555);
         }
     }
 
@@ -138,7 +142,7 @@ class Pay
 
         // 判断响应
         if (!empty($response['message'])) {
-            throw new \Exception($response['message'], 555);
+            throw new \ErrorException($response['message'], 555);
         } else {
             return $response;
         }
@@ -173,7 +177,7 @@ class Pay
         } elseif (isset($params['out_trade_no'])) {
             $data['out_trade_no'] = $params['out_trade_no'];
         } else {
-            throw new \Exception("I need 'transaction_id' or 'out_trade_no'.");
+            throw new \ErrorException("I need 'transaction_id' or 'out_trade_no'.", 406);
         }
 
         // 可选参数
@@ -200,7 +204,7 @@ class Pay
 
         // 判断响应
         if (!empty($response['code'])) {
-            throw new \Exception($response['message'], 555);
+            throw new \ErrorException($response['message'], 555);
         }
 
         return $response;

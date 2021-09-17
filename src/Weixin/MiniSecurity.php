@@ -34,7 +34,7 @@ class MiniSecurity
         if (empty($response['errcode'])) {
             return true;
         } else {
-            throw new \Exception($response['errMsg'], 555);
+            throw new \ErrorException($response['errMsg'], 555);
         }
     }
 

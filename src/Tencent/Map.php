@@ -14,12 +14,15 @@ class Map
     private $key;
 
     /**
-     * @param string $key [密钥]
+     * Create a new instance.
+     * 
+     * @param  string $key [密钥]
+     * @return void
      */
     public function __construct($key)
     {
         if (!$key) {
-            throw new \Exception('I need the "key"');
+            throw new \Exception('I need the key');
         }
 
         $this->key = $key;
@@ -64,7 +67,7 @@ class Map
             ],
         ]);
         if ($response['status'] !== 0) {
-            throw new \Exception($response['message']);
+            throw new \ErrorException($response['message'], 555);
         }
 
         return $response['result'];
@@ -95,7 +98,7 @@ class Map
             'data' => $data,
         ]);
         if ($response['status'] !== 0) {
-            throw new \Exception($response['message']);
+            throw new \ErrorException($response['message'], 555);
         }
 
         return $response['result'];

@@ -2,6 +2,8 @@
 
 namespace Higreen\Api\Weixin;
 
+use Higreen\Api\Http;
+
 /**
  * 微信开放平台
  * 文档:https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Resource_Center_Homepage.html
@@ -9,17 +11,21 @@ namespace Higreen\Api\Weixin;
 class Oplatform extends Base
 {
     /**
-     * @param array $init
+     * Create a new instance.
+     * 
+     * @param array $init [
      *  app_id       [str] [必填] [AppID(应用ID)]
      *  app_secret   [str] [必填] [AppSecret(应用密钥)]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
         if (empty($init['app_id'])) {
-            throw new \Exception('I need the "app_id"');
+            throw new \Exception('I need the app_id');
         }
         if (empty($init['app_secret'])) {
-            throw new \Exception('I need the "app_secret"');
+            throw new \Exception('I need the app_secret');
         }
 
         $this->app_id     = $init['app_id'];
@@ -49,7 +55,7 @@ class Oplatform extends Base
         if (empty($response['errcode'])) {
             return $response;
         } else {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 
@@ -73,7 +79,7 @@ class Oplatform extends Base
         ]);
 
         if (!empty($response['errcode'])) {
-            throw new \Exception($response['errmsg']);
+            throw new \ErrorException($response['errmsg'], 555);
         }
 
         return $response;

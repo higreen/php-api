@@ -14,9 +14,13 @@ class Mini
     public $app_secret;
 
     /**
-     * @param array $init
+     * Create a new instance.
+     *
+     * @param  array  $init [
      *  app_id       [str] [必填] [AppID(小程序ID)]
      *  app_secret   [str] [必填] [AppSecret(小程序密钥)]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
@@ -54,7 +58,7 @@ class Mini
         if (empty($response['errcode'])) {
             return $response;
         } else {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 
@@ -80,7 +84,7 @@ class Mini
         if (empty($response['errcode'])) {
             return $response['access_token'];
         } else {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 
@@ -137,7 +141,7 @@ class Mini
         if (empty($response['errcode'])) {
             return $response;
         } else {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 
@@ -182,7 +186,7 @@ class Mini
         if (empty($response['errcode'])) {
             return $response;
         } else {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 }

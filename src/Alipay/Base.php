@@ -17,23 +17,25 @@ class Base
     protected $request_body = [];
 
     /**
-     * Constructor
+     * Create a new instance.
      * 
-     * @param array $init
+     * @param array $init [
      *  app_id       [str] [必填] [支付宝分配给开发者的应用ID]
      *  app_key      [str] [必填] [应用密钥]
      *  notify_url   [str] [必填] [支付宝服务器主动通知商户服务器里指定的页面 http/https 路径]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
         if (empty($init['app_id'])) {
-            throw new \Exception('I need the "app_id"');
+            throw new \Exception('I need the app_id');
         }
         if (empty($init['app_key'])) {
-            throw new \Exception('I need the "app_key"');
+            throw new \Exception('I need the app_key');
         }
         if (empty($init['notify_url'])) {
-            throw new \Exception('I need the "notify_url"');
+            throw new \Exception('I need the notify_url');
         }
 
         $this->app_key = $init['app_key'];

@@ -14,6 +14,12 @@ class Transfer
     public $sslcert;// 证书路径
     public $sslkey;
 
+    /** 
+     * Create a new instance.
+     * 
+     * @param  array $init
+     * @return void
+     */
     public function __construct($init)
     {
         $this->mch_id = $init['mch_id'];
@@ -78,10 +84,10 @@ class Transfer
             if ($response['result_code'] === 'SUCCESS') {
                 return $response;
             } else {
-                throw new \Exception($response['err_code_des']);
+                throw new \ErrorException($response['err_code_des'], 555);
             }
         } else {
-            throw new \Exception($response['return_msg']);
+            throw new \ErrorException($response['return_msg'], 555);
         }
     }
 

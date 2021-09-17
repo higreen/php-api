@@ -51,13 +51,13 @@ composer require higreen/php-api
         - 小程序支付
         - 扫码支付
         - 回调数据验证签名
-* [短信](#短信)
-    + [阿里云](#sms-aliyun)
-    + [腾讯云](#sms-tencent)
+* [阿里云](#阿里云)
+    + [短信](#aliyun-sms)
 * [百度云](#百度云)
     + [语音](#baidu-speech)
 * [腾讯云](#腾讯云)
     + [地图](#tencent-map)
+    + [短信](#tencent-sms)
 
 ---
 
@@ -391,15 +391,14 @@ $Pay = new Pay($init);
 
 </details>
 
-### 短信
+### 阿里云
 
 <details>
-  <summary><b>阿里云</b></summary>
-
+  <summary><b>短信</b></summary>
 <!-- toc -->
 
 ```php
-use Higreen\Api\Sms\Aliyun;
+use Higreen\Api\Aliyun\Sms;
 
 $init = [
     'id' => '应用Access Key ID',
@@ -408,28 +407,6 @@ $init = [
 ];
 $Sms = new Aliyun($init);
 $res = $Sms->send($phones, $template, $params);
-```
-
-<!-- tocstop -->
-
-</details>
-
-<details>
-  <summary><b>腾讯云</b></summary>
-
-<!-- toc -->
-
-
-```php
-use Higreen\Api\Sms\Tencent;
-
-$init = [
-    'id' => '应用id，SDK AppID',
-    'key' => '应用密钥，App Key',
-    'sign' => '短信签名',
-];
-$Sms = new Tencent($init);
-$res = $Sms->send($phone, $tpl_id, $tpl_params);
 ```
 
 <!-- tocstop -->
@@ -470,6 +447,28 @@ $Speech = new Speech($init);
 </details>
 
 ### 腾讯云
+
+<details>
+  <summary><b id="tencent-map">短信</b></summary>
+
+<!-- toc -->
+
+```php
+use Higreen\Api\Tencent\Sms;
+
+$init = [
+    'id' => '密钥 ID',
+    'key' => '密钥 KEY',
+    'app_id' => '短信应用 SDKAppID',
+    'sign' => '短信签名',
+];
+$Sms = new Sms($init);
+$res = $Sms->send($phones, $template, $params);
+```
+
+<!-- tocstop -->
+
+</details>
 
 <details>
   <summary><b id="tencent-map">地图</b></summary>

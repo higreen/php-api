@@ -86,7 +86,7 @@ class Pay extends Base
         ]);
         $response = $response['alipay_trade_create_response'];
         if ($response['code'] !== '10000') {
-            throw new \Exception($response['sub_msg'], 555);
+            throw new \ErrorException($response['sub_msg'], 555);
         }
 
         return $response;
@@ -138,6 +138,6 @@ class Pay extends Base
         // 抛出错误异常
 		$response = mb_convert_encoding($response, 'UTF-8', 'GBK');
         $response = json_decode($response, true);
-        throw new \Exception($response['alipay_trade_precreate_response']['sub_msg'], 555);
+        throw new \ErrorException($response['alipay_trade_precreate_response']['sub_msg'], 555);
     }
 }

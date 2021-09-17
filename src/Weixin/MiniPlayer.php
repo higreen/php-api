@@ -35,7 +35,7 @@ class MiniPlayer
         if (empty($response['errcode'])) {
             return $response;
         } else {
-            throw new \Exception($response['errmsg'], 555);
+            throw new \ErrorException($response['errmsg'], 555);
         }
     }
 }

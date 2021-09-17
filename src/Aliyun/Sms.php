@@ -1,54 +1,60 @@
 <?php
 
-namespace Higreen\Api\Sms;
+namespace Higreen\Api\Aliyun;
 
 use Higreen\Api\Http;
 
 /**
- * 阿里云短信
- * 文档地址: https://help.aliyun.com/document_detail/101414.html?spm=a2c4g.11186623.6.625.2af456e0dOQErU
+ * 阿里云短信服务
+ * 文档: https://help.aliyun.com/document_detail/101414.html
  */
-class Aliyun
+class Sms
 {
-    // 应用ID
+    // 密钥ID
     private $id;
-    // 应用秘钥
+
+    // 秘钥KEY
     private $secret;
+
     // 短信签名
     private $sign;
 
     /**
-     * @param array $init
-     *  id     [str] [必填] [应用Access Key ID]
-     *  secret [str] [必填] [应用Access Key Secret]
-     *  sign   [str] [必填] [签名名称]
+     * Create a new instance.
+     * 
+     * @param array $init [
+     *  id     [str] [必填] [密钥AccessKey ID]
+     *  secret [str] [必填] [密钥AccessKey Secret]
+     *  sign   [str] [必填] [短信签名]
+     * ]
+     * @return void
      */
     public function __construct($init)
     {
         if (empty($init['id'])) {
-            throw new \Exception('I need the "id"');
+            throw new \Exception('I need the id');
         }
         if (empty($init['secret'])) {
-            throw new \Exception('I need the "secret"');
+            throw new \Exception('I need the secret');
         }
         if (empty($init['sign'])) {
-            throw new \Exception('I need the "sign"');
+            throw new \Exception('I need the sign');
         }
 
-        $this->id     = $init['id'];
+        $this->id = $init['id'];
         $this->secret = $init['secret'];
-        $this->sign   = $init['sign'];
+        $this->sign = $init['sign'];
     }
 
     /**
      * 发送短信
      *
-     * @param  string $phones   [电话号码。支持对多个手机号码发送短信，手机号码之间以英文逗号（,）分隔。上限为1000个手机号码。]
-     * @param  string $template [短信模板ID]
-     * @param  array  $param    [短信模板参数]
-     * @return mixed            [返回true，或者失败信息]
+     * @param  string $phones   电话号码。支持对多个手机号码发送短信，手机号码之间以英文逗号（,）分隔。上限为1000个手机号码
+     * @param  string $template 短信模板ID
+     * @param  array  $params   短信模板参数
+     * @return array
      */
-    public function send($phones, $template, $param)
+    public function send($phones, $template, $params = [])
     {
         // 公共请求参数
         $data = [
@@ -68,8 +74,10 @@ class Aliyun
             'PhoneNumbers' => $phones,
             'SignName' => $this->sign,
             'TemplateCode' => $template,
-            'TemplateParam' => json_encode($param, 265),
         ]);
+        if ($params) {
+            $data['TemplateParam'] = json_encode($params, 265);
+        }
 
         // 发送请求
         $query = $this->_getQuery($data);
@@ -77,11 +85,7 @@ class Aliyun
             'url' => 'https://dysmsapi.aliyuncs.com/?' . $query,
         ]);
 
-        if ($response['Code'] !== 'OK') {
-            throw new \Exception($response['Message']);
-        } else {
-            return $response;
-        }
+        return $response;
     }
 
     /**
@@ -94,7 +98,7 @@ class Aliyun
      * 获取请求字符串
      * 文档地址：https://help.aliyun.com/document_detail/101343.html
      *
-     * @param  array $config [请求参数]
+     * @param  array $config 请求参数
      * @return string
      */
     private function _getQuery(array $config)
@@ -123,7 +127,7 @@ class Aliyun
     /**
      * 特殊URL编码
      *
-     * @param  string $value [待编码的值]
+     * @param  string $value 待编码的值
      * @return string
      */
     private function _speciaUrlencode(string $value)

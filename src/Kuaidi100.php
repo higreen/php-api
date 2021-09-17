@@ -19,18 +19,16 @@ class Kuaidi100
     /**
      * 构造函数
      * @param array $init [
-     * customer [str] [必填] []
-     * key      [str] [必填] []
-     * ]
-     * @return void
+     *  customer [str] [必填] []
+     *  key      [str] [必填] []
      */
-    public function __construct(array $init)
+    public function __construct($init)
     {
         if (empty($init['customer']) || !is_string($init['customer'])) {
-            throw new \Exception('Illegal "customer"');
+            throw new \Exception('I need the customer');
         }
         if (empty($init['key']) || !is_string($init['key'])) {
-            throw new \Exception('Illegal "key"');
+            throw new \Exception('I need the key');
         }
 
         $this->customer = $init['customer'];
@@ -76,13 +74,13 @@ class Kuaidi100
     {
         // 检测请求参数
         if (empty($config['company']) || !is_string($config['company'])) {
-            throw new Exception('Illegal "company"');
+            throw new \Exception('Illegal "company"');
         }
         if (empty($config['number']) || !is_string($config['number'])) {
-            throw new Exception('Illegal "number"');
+            throw new \Exception('Illegal "number"');
         }
         if (empty($config['callbackurl']) || !is_string($config['callbackurl'])) {
-            throw new Exception('Illegal "callbackurl"');
+            throw new \Exception('Illegal "callbackurl"');
         }
 
         // 构建请求参数

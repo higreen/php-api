@@ -73,7 +73,7 @@ class Transfer extends Base
         if ($response['code'] == '10000') {
             return $response;
         } else {
-            throw new \Exception($response['sub_msg'], 555);
+            throw new \ErrorException($response['sub_msg'], 555);
         }
     }
 }
