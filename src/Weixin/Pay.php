@@ -28,19 +28,23 @@ class Pay
      */
     public function __construct($init)
     {
-        if (empty($init['mch_id']))
+        if (empty($init['mch_id'])) {
             throw new \Exception('I need the mch_id');
-        if (empty($init['mch_key_v3']))
+        }
+        if (empty($init['mch_key_v3'])) {
             throw new \Exception('I need the mch_key_v3');
-        if (empty($init['sslcert']) || !file_exists($init['sslcert']))
+        }
+        if (empty($init['sslcert']) || !file_exists($init['sslcert'])) {
             throw new \Exception('I need the sslcert');
-        if (empty($init['sslkey']) || !file_exists($init['sslkey']))
+        }
+        if (empty($init['sslkey']) || !file_exists($init['sslkey'])) {
             throw new \Exception('I need the sslkey');
+        }
 
-        $this->mch_id     = $init['mch_id'];
-        $this->mch_key    = $init['mch_key_v3'];
-        $this->sslcert    = $init['sslcert'];
-        $this->sslkey     = $init['sslkey'];
+        $this->mch_id  = $init['mch_id'];
+        $this->mch_key = $init['mch_key_v3'];
+        $this->sslcert = $init['sslcert'];
+        $this->sslkey  = $init['sslkey'];
     }
 
     /**
@@ -53,6 +57,7 @@ class Pay
      *  notify_url   [str] [必填] [直接可访问的URL，不允许携带查询串，要求必须为https地址]
      *  out_trade_no [str] [必填] [商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一]
      *  total        [int] [必填] [订单总金额，单位为分]
+     *  time_expire  [str] [可选] [订单失效时间,示例值：2018-06-08T10:34:56+08:00]
      *  attach       [str] [可选] [附加数据，在查询API和支付通知中原样返回]
      *  openid       [str] [可选] [trade_type=JSAPI，此参数必传，用户在直连商户appid下的唯一标识]
      *  type         [str] [可选] [trade_type=H5，此参数必传，场景类型 示例值：iOS, Android, Wap]
@@ -64,7 +69,6 @@ class Pay
         $data = [
             'amount'       => ['total' => $params['total']],
             'appid'        => $params['appid'],
-            'attach'       => '',
             'description'  => $params['description'],
             'mchid'        => $this->mch_id,
             'notify_url'   => $params['notify_url'],
@@ -95,6 +99,9 @@ class Pay
         // 可选参数
         if (isset($params['attach'])) {
             $data['attach'] = strval($params['attach']);
+        }
+        if (isset($params['time_expire'])) {
+            $data['time_expire'] = $params['time_expire'];
         }
 
         // 发送请求

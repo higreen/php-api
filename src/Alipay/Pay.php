@@ -12,14 +12,15 @@ class Pay extends Base
     /**
      * App支付
      *
-     * @param  array  $params [
-     * subject          [str] [必填] [商品的标题/交易标题/订单标题/订单关键字等]
-     * out_trade_no     [str] [必填] [商户网站唯一订单号]
-     * total_amount     [str] [必填] [订单总金额，单位为元，精确到小数点后两位]
-     * product_code     [str] [可选] [销售产品码，商家和支付宝签约的产品码，为固定值 QUICK_MSECURITY_PAY]
-     * passback_params  [str] [可选] [异步通知时将该参数原样返回。本参数必须进行 UrlEncode]
+     * @param array $params [
+     *  subject          [str] [必填] [商品的标题/交易标题/订单标题/订单关键字等]
+     *  out_trade_no     [str] [必填] [商户网站唯一订单号]
+     *  total_amount     [str] [必填] [订单总金额，单位为元，精确到小数点后两位]
+     *  time_expire      [str] [可选] [订单绝对超时时间。格式为yyyy-MM-dd HH:mm:ss。]
+     *  product_code     [str] [可选] [销售产品码，商家和支付宝签约的产品码，为固定值 QUICK_MSECURITY_PAY]
+     *  passback_params  [str] [可选] [异步通知时将该参数原样返回。本参数必须进行 UrlEncode]
      * ]
-     * @return string [支付参数]
+     * @return string 支付参数
      */
     public function app($params)
     {
@@ -35,11 +36,14 @@ class Pay extends Base
         ];
 
         // 可选参数
-        if (!empty($params['product_code'])) {
+        if (isset($params['passback_params'])) {
+            $biz_content['passback_params'] = $params['passback_params'];
+        }
+        if (isset($params['product_code'])) {
             $biz_content['product_code'] = $params['product_code'];
         }
-        if (!empty($params['passback_params'])) {
-            $biz_content['passback_params'] = $params['passback_params'];
+        if (isset($params['time_expire'])) {
+            $biz_content['time_expire'] = $params['time_expire'];
         }
 
         // 获取签名
@@ -52,11 +56,11 @@ class Pay extends Base
     /**
      * 小程序
      *
-     * @param  array  $params [
-     * subject          [str] [必填] [商品的标题/交易标题/订单标题/订单关键字等]
-     * out_trade_no     [str] [必填] [商户网站唯一订单号]
-     * total_amount     [str] [必填] [订单总金额，单位为元，精确到小数点后两位]
-     * buyer_id         [str] [必填] [支付宝用户的唯一userId ]
+     * @param array $params [
+     *  subject          [str] [必填] [商品的标题/交易标题/订单标题/订单关键字等]
+     *  out_trade_no     [str] [必填] [商户网站唯一订单号]
+     *  total_amount     [str] [必填] [订单总金额，单位为元，精确到小数点后两位]
+     *  buyer_id         [str] [必填] [支付宝用户的唯一userId ]
      * ]
      * @return array [out_trade_no,trade_no]
      */

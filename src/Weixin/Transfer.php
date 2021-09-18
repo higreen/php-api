@@ -32,7 +32,7 @@ class Transfer
      * 付款到零钱
      * 文档：https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_2
      *
-     * @param  array  $params [
+     * @param array $params [
      * partner_trade_no [str] [必填] [商户订单号]
      * mch_appid        [str] [必填] [商户账号appid]
      * openid           [str] [必填] [用户openid]
@@ -79,16 +79,91 @@ class Transfer
             'sslkey' => $this->sslkey,
         ]);
 
-        // 判断响应
-        if ($response['return_code'] === 'SUCCESS') {
-            if ($response['result_code'] === 'SUCCESS') {
-                return $response;
-            } else {
-                throw new \ErrorException($response['err_code_des'], 555);
-            }
-        } else {
+        return $this->_checkResponse($response);
+    }
+
+    /**
+     * 银行卡
+     * 文档: https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay_yhk.php?chapter=24_2
+     * 
+     * @param array $params [
+     *  partner_trade_no [str] [必填] [商户订单号]
+     *  enc_bank_no      [str] [必填] [收款方银行卡号]
+     *  enc_true_name    [str] [必填] [收款方用户名]
+     *  bank_code        [str] [必填] [银行卡所在开户行编号]
+     *  amount           [int] [必填] [付款金额：RMB分]
+     *  desc             [str] [可选] [付款说明]
+     * ]
+     * @return array
+     */
+    public function bank($params)
+    {
+        // 请求参数
+        $data = [
+            'mchid'             => $this->mch_id,
+            'nonce_str'         => rand(),
+            'sign'              => '',
+            'partner_trade_no'  => $params['partner_trade_no'],
+            'enc_bank_no'       => $params['enc_bank_no'],
+            'enc_true_name'     => $params['enc_true_name'],
+            'bank_code'         => $params['bank_code'],
+            'amount'            => $params['amount'],
+        ];
+
+        // 可选参数
+        if (isset($params['desc'])) {
+            $data['desc'] = $params['desc'];
+        }
+
+        // 获取签名
+        $data['sign'] = $this->getSignature($data);
+
+        // 发送请求
+        $response = Http::post([
+            'url' => 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers',
+            'data' => $data,
+            'data_type' => 'xml',
+            'response_type' => 'xml',
+            'sslcert' => $this->sslcert,
+            'sslkey' => $this->sslkey,
+        ]);
+
+        return $this->_checkResponse($response);
+    }
+
+    /**
+     * 获取RSA加密公钥
+     * 
+     * @return string
+     */
+    public function getRSA()
+    {
+        // 请求参数
+        $data = [
+            'mchid'     => $this->mch_id,
+            'nonce_str' => strval(rand()),
+            'sign'      => '',
+            'sign_type' => 'MD5'
+        ];
+
+        // 获取签名
+        $data['sign'] = $this->getSignature($data);
+
+        // 发送请求
+        $response = Http::post([
+            'url' => 'https://fraud.mch.weixin.qq.com/risk/getpublickey',
+            'data' => $data,
+            'data_type' => 'xml',
+            'response_type' => 'xml',
+            'sslcert' => $this->sslcert,
+            'sslkey' => $this->sslkey,
+        ]);
+
+        if (empty($response['pub_key'])) {
             throw new \ErrorException($response['return_msg'], 555);
         }
+
+        return $response['pub_key'];
     }
 
     // 获取签名
@@ -107,5 +182,19 @@ class Transfer
         $signature = strtoupper(md5($signature));
 
         return $signature;
+    }
+
+    // 检测响应数据
+    private function _checkResponse($response)
+    {
+        if ($response['return_code'] === 'SUCCESS') {
+            if ($response['result_code'] === 'SUCCESS') {
+                return $response;
+            } else {
+                throw new \ErrorException($response['err_code_des'], 555);
+            }
+        } else {
+            throw new \ErrorException($response['return_msg'], 555);
+        }
     }
 }
