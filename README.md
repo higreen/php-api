@@ -288,10 +288,10 @@ $Pay = new Pay([
     ]);
     ```
     
-4. 回调报文解密
+4. 解密回调报文
 
     ```php
-    $res = Pay::decryptResource('商户号APIV3密钥', '回调的加密报文');
+    $res = Pay::decryptResource('商户号APIV3密钥', '加密报文');
     ```
 
 <!-- tocstop -->

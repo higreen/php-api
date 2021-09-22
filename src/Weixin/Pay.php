@@ -224,29 +224,35 @@ class Pay
     */
 
     /**
-     * 回调报文解密
+     * 解密回调报文
      *
-     * @param  string $mch_key  [商户号APIV3密钥]
-     * @param  string $resource [回调的加密报文]
+     * @param  string $passphrase 商户号APIV3密钥
+     * @param  array  $resource 回调报文
      * @return array
      */
-    public static function decryptResource($mch_key, $resource)
+    public static function decryptResource($passphrase, $resource = null)
     {
-        $ciphertext = base64_decode($resource['ciphertext']);
-        $ctext = substr($ciphertext, 0, -16);
-        $authTag = substr($ciphertext, -16);
+        if (!$resource) {
+            // read raw data from the request body
+            $input = file_get_contents('php://input');
+            if (!$input) return [];
 
-        $data = \openssl_decrypt(
-            $ctext,
-            'aes-256-gcm',
-            $mch_key,
-            \OPENSSL_RAW_DATA,
-            $resource['nonce'],
-            $authTag,
-            $resource['associated_data']
-        );
+            $input = json_decode($input, true);
+            $resource = $input['resource'];
+        }
 
-        return json_decode($data, true);
+        $ciphertext = $resource['ciphertext'] ?? '';
+        $iv = $resource['nonce'] ?? '';
+        $aad = $resource['associated_data'] ?? '';
+        if (!$ciphertext || !$iv || !$aad) return [];
+
+        // 解密数据
+        $ciphertext = base64_decode($ciphertext);
+        $data = substr($ciphertext, 0, -16);
+        $tag = substr($ciphertext, -16);
+        $output = \openssl_decrypt($data, 'aes-256-gcm', $passphrase, OPENSSL_RAW_DATA, $iv, $tag, $aad);
+
+        return json_decode($output, true);
     }
 
     /*
