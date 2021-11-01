@@ -16,7 +16,7 @@ class Map
     /**
      * Create a new instance.
      * 
-     * @param  string $key [密钥]
+     * @param  string $key 密钥
      * @return void
      */
     public function __construct($key)
@@ -31,27 +31,50 @@ class Map
     /**
      * 地址定位
      *
-     * @param  string $address [地址描述]
+     * @param  string $address 地址描述
+     * @param  bool $location 是否为经纬度
      * @return array
      */
-    public function locateByAddress(string $address)
+    public function locateByAddress($address, $is_location = false)
     {
+        // 请求参数
+        $data = [
+            'key' => $this->key,
+        ];
+        if ($is_location) {
+            $data['location'] = $address;
+        } else {
+            $data['address'] = $address;
+        }
+
         // 发送请求
         $response = Http::get([
             'url' => 'https://apis.map.qq.com/ws/geocoder/v1/',
-            'data' => [
-                'address' => $address,
-                'key' => $this->key,
-            ],
+            'data' => $data,
         ]);
+        if ($response['status'] !== 0) {
+            throw new \ErrorException($response['message'], 555);
+        }
 
-        return $response;
+        return $response['result'];
+    }
+
+    /**
+     * 坐标定位
+     *
+     * @param float $longitude 经度
+     * @param float $latitude 纬度
+     * @return array
+     */
+    public function locateByCoordinate($longitude, $latitude)
+    {
+        return $this->locateByAddress("{$latitude},{$longitude}", true);
     }
 
     /**
      * IP定位
      *
-     * @param  string $ip [IP地址]
+     * @param  string $ip IP地址,默认当前请求IP
      * @return array
      */
     public function locateByIp($ip = '')

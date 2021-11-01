@@ -489,7 +489,11 @@ $Map = new Map('key');
     ```php
     $res = $Map->locateByIp($ip);
     ```
-3. 查询行政区域
+3. 坐标定位
+    ```php
+    $res = $Map->locateByCoordinate($longitude, $latitude);
+    ```
+4. 查询行政区域
     ```php
     $res = $Map->getDistrict($id = 0);// 子级行政区划
     ```
