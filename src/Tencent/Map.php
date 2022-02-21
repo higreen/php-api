@@ -68,6 +68,16 @@ class Map
      */
     public function locateByCoordinate($longitude, $latitude)
     {
+        # 检测请求参数
+        if (
+            !is_numeric($latitude)
+            || !is_numeric($latitude)
+            || abs($longitude) > 180
+            || abs($latitude) > 90
+        ) {
+            throw new \ErrorException('经纬度不合法', 406);
+        }
+
         return $this->locateByAddress("{$latitude},{$longitude}", true);
     }
 
