@@ -81,6 +81,11 @@ class Sms extends Base
             ],
         ]);
 
+        // 判断响应
+        if (!empty($response['Error']['Message'])) {
+            throw new \ErrorException($response['Error']['Message'], 555);
+        }
+
         return $response;
     }
 }
