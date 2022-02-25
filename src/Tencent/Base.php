@@ -56,7 +56,7 @@ class Base
         $CanonicalQueryString = '';
         $CanonicalHeaders = "content-type:application/json; charset=utf-8\nhost:{$host}\n";
         $SignedHeaders = "content-type;host";
-        $HashedRequestPayload = hash('SHA256', json_encode($data));
+        $HashedRequestPayload = hash('SHA256', json_encode($data, JSON_UNESCAPED_UNICODE));
         $CanonicalRequest = "{$HTTPRequestMethod}\n{$CanonicalURI}\n{$CanonicalQueryString}\n{$CanonicalHeaders}\n{$SignedHeaders}\n{$HashedRequestPayload}";
 
         // step 2: build string to sign
