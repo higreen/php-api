@@ -43,7 +43,7 @@ class NumIdentify
      * 
      * @param array $init [
      *  app_id      [str] [必填] [应用ID]
-     *  public_key  [str] [必填] [平台公钥]
+     *  public_key  [str] [可选] [平台公钥]
      *  private_key [str] [必填] [应用私钥.创建应用时,请使用同一对密钥]
      * ]
      * @return void
@@ -53,21 +53,14 @@ class NumIdentify
         if (empty($init['app_id'])) {
             throw new \Exception('I need the app_id');
         }
-        if (empty($init['public_key'])) {
-            throw new \Exception('I need the public_key');
-        }
         if (empty($init['private_key'])) {
             throw new \Exception('I need the private_key');
         }
-
-        $public_key = wordwrap($init['public_key'], 64, "\n", true);
-        $public_key = "-----BEGIN RSA PUBLIC KEY-----\n{$public_key}\n-----END RSA PUBLIC KEY-----";
 
         $private_key = wordwrap($init['private_key'], 64, "\n", true);
         $private_key = "-----BEGIN RSA PRIVATE KEY-----\n{$private_key}\n-----END RSA PRIVATE KEY-----";
 
         $this->app_id = $init['app_id'];
-        $this->public_key = $public_key;
         $this->private_key = $private_key;
     }
 
