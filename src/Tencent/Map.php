@@ -5,12 +5,16 @@ namespace Higreen\Api\Tencent;
 use Higreen\Api\Http;
 
 /**
- * 地图
+ * 腾讯地图
  * 文档地址：https://lbs.qq.com/webservice_v1/index.html
  */
 class Map
 {
-    // 应用秘钥
+    /**
+     * 应用秘钥
+     * 
+     * @var string
+     */
     private $key;
 
     /**

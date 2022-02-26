@@ -10,10 +10,18 @@ use Higreen\Api\Http;
  */
 class Sms extends Base
 {
-    // 短信应用 SDKAppID
+    /** 
+     * 短信应用 SDKAppID
+     * 
+     * @var string
+     * */ 
     private $app_id;
 
-    // 短信签名
+    /**
+     * 短信签名
+     * 
+     * @var string
+     */
     private $sign;
 
     /**

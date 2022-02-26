@@ -58,6 +58,8 @@ composer require higreen/php-api
 * [腾讯云](#腾讯云)
     + [地图](#tencent-map)
     + [短信](#tencent-sms)
+* [移动](#移动)
+    + [号码认证](#yidong-identify)
 
 ---
 
@@ -496,6 +498,38 @@ $Map = new Map('key');
 4. 查询行政区域
     ```php
     $res = $Map->getDistrict($id = 0);// 子级行政区划
+    ```
+
+<!-- tocstop -->
+
+</details>
+
+### 移动
+
+<details>
+  <summary><b id="yidong-identify">号码认证</b></summary>
+
+<!-- toc -->
+
+```php
+use Higreen\Api\Yidong\NumIdentify;
+
+$init = [
+    'app_id' => 'APPID',
+    'app_key' => 'APPKEY',
+    'public_key' => '平台公钥',
+    'private_key' => '应用私钥.创建应用时,请使用同一对密钥',
+];
+$NumIdentify = new NumIdentify($init);
+```
+1. 获取手机号
+    ```
+    $phone = $NumIdentify->getPhoneNumber('token 业务凭证');
+    ```
+
+2. 本机号码校验
+    ```
+    $bool = $NumIdentify->isDevicePhone('未实现');
     ```
 
 <!-- tocstop -->

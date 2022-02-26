@@ -7,10 +7,18 @@ namespace Higreen\Api\Tencent;
  */
 class Base
 {
-    // 密钥ID
+    /**
+     * API密钥-SecretId
+     * 
+     * @var string
+     */
     private $id;
 
-    // 密钥KEY
+    /**
+     * API密钥-SecretKey
+     * 
+     * @var string
+     */
     private $key;
 
     /**
@@ -36,14 +44,14 @@ class Base
     }
 
     /** 
-     * HTTP 标准身份认证头部字段
+     * 构建 HTTP 标准身份认证头部字段
      * 
      * @param string $method 请求方法
      * @param string $url 请求链接
      * @param array $data 请求数据
      * @return string
      */
-    protected function getAuthorization($method, $url, $data)
+    final protected function getAuthorization($method, $url, $data)
     {
         $time = time();
         $date = gmdate('Y-m-d', $time);

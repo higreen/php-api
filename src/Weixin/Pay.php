@@ -288,8 +288,9 @@ class Pay
 
     /**
      * 获取签名
-     * @param  array  $params    [签名的数据]
-     * @param  string $sign_type [签名方式:MD5,RSA]
+     * 
+     * @param  array  $params    签名的数据
+     * @param  string $sign_type 签名方式:MD5,RSA
      * @return string
      */
     private function _getSignature($params)
