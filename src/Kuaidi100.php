@@ -2,55 +2,57 @@
 
 namespace Higreen\Api;
 
-use Higreen\Api\Http;
-
 /**
  * 快递100
- * 文档地址：https://www.kuaidi100.com/openapi/
+ * 文档:https://www.kuaidi100.com/openapi/
  */
 class Kuaidi100
 {
-
-    // 公司编号
-    private $customer = '';
-    // 密钥
-    private $key = '';
+    /**
+     * 公司编号
+     *
+     * @var string
+     */ 
+    private $customer;
 
     /**
-     * 构造函数
-     * @param array $init [
-     *  customer [str] [必填] []
-     *  key      [str] [必填] []
+     * 密钥
+     *
+     * @var string
      */
-    public function __construct($init)
-    {
-        if (empty($init['customer']) || !is_string($init['customer'])) {
-            throw new \Exception('I need the customer');
-        }
-        if (empty($init['key']) || !is_string($init['key'])) {
-            throw new \Exception('I need the key');
-        }
+    private $key;
 
-        $this->customer = $init['customer'];
-        $this->key = $init['key'];
+    /**
+     * Create a new instance.
+     * 
+     * @param  string customer 公司编号
+     * @param  string key 密钥
+     * @return void
+     */
+    public function __construct(string $customer, string $key)
+    {
+        $this->customer = $customer;
+        $this->key = $key;
     }
 
     /**
-     * 实时查询API
-     * @author Green
-     * @return [type] [description]
+     * 实时查询
+     * 
+     * @param  array $params
+     * @return array
      */
-    public function query(array $config)
+    public function query(array $params): array
     {
+        // 构建请求数据
         $data = [
             'customer' => $this->customer,
             'sign' => '',
             'param' => '',
         ];
-        $data['param'] = json_encode($config);
+        $data['param'] = json_encode($params, JSON_UNESCAPED_UNICODE);
         $data['sign'] = strtoupper(md5($data['param'] . $this->key . $data['customer']));
 
-        // 请求第三方服务
+        // 发送请求
         $response = Http::post([
             'url' => 'https://poll.kuaidi100.com/poll/query.do',
             'data' => $data,
@@ -61,16 +63,16 @@ class Kuaidi100
     }
 
     /**
-     * 订阅推送API
-     * @author Green
+     * 订阅推送
+     * 
      * @param  array $config [
      *  company     [str] [必填] [订阅的快递公司的编码]
      *  number      [str] [必填] [订阅的快递单号]
      *  callbackurl [str] [必填] [回调接口的地址]
      * ]
-     * @return [type] [description]
+     * @return array
      */
-    public function subscribe(array $config)
+    public function subscribe(array $config): array
     {
         // 检测请求参数
         if (empty($config['company']) || !is_string($config['company'])) {
@@ -83,7 +85,7 @@ class Kuaidi100
             throw new \Exception('Illegal "callbackurl"');
         }
 
-        // 构建请求参数
+        // 构建请求数据
         $data = [
             'schema' => 'json',
             'param' => [
@@ -97,7 +99,7 @@ class Kuaidi100
         ];
         $data['param'] = json_encode($data['param']);
 
-        // 请求第三方服务
+        // 发送请求
         $response = Http::post([
             'url' => 'https://poll.kuaidi100.com/poll',
             'data' => $data,

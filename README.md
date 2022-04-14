@@ -58,8 +58,11 @@ composer require higreen/php-api
 * [腾讯云](#腾讯云)
     + [地图](#tencent-map)
     + [短信](#tencent-sms)
+    + [人脸核身](#tencent-faceid)
 * [移动](#移动)
     + [号码认证](#yidong-identify)
+* 快递100
+* 极光推送
 
 ---
 
@@ -503,6 +506,29 @@ $Map = new Map('key');
 <!-- tocstop -->
 
 </details>
+
+<detail>
+  <summary><b id="tencent-faceid">人脸核身</b></summary>
+
+<!-- toc -->
+
+```php
+use Higreen\Api\Tencent\Faceid;
+
+$Faceid = new Faceid([
+    'id'  => '密钥 ID',
+    'key' => '秘钥 KEY',
+]);
+```
+
+1. 身份信息认证
+    ```php
+    $bool = $Faceid->verifyNameNumber('姓名', '身份证号码');
+    ```
+
+<!-- tocstop -->
+
+</detail>
 
 ### 移动
 
