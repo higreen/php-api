@@ -85,7 +85,7 @@ class Jpush
         if (isset($params['cid'])) {
             $data['cid'] = $params['cid'];
         }
-        if (empty($data['mesaage']) && empty($data['notification'])) {
+        if (empty($data['message']) && empty($data['notification'])) {
             throw new \Exception('缺少推送内容', 400);
         }
 
