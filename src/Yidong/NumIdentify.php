@@ -80,7 +80,7 @@ class NumIdentify
             'appid' => $this->app_id,
             'token' => $token,
             'sign' => '',
-            'encryptionaigorithm' => 'RSA',
+            'encryptionalgorithm' => 'RSA',
         ];
 
         // 签名
@@ -95,7 +95,7 @@ class NumIdentify
 
         // 验证响应
         $code = $response['resultCode'] ?? '';
-        if ($code === '10300') {
+        if ($code === '103000') {
             // 解密手机号
             $data = hex2bin($response['msisdn']);
             openssl_private_decrypt($data, $decrypted_data, $this->private_key);

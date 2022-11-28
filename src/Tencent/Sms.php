@@ -51,20 +51,39 @@ class Sms extends Base
     }
 
     /**
-     * 指定模板单发短信
+     * 指定单个手机号
      *
-     * @param  string|array $phones     手机号，单次请求最多支持200个手机号
-     * @param  string       $template   短信模板ID
-     * @param  array        $params     短信模板参数
+     * @param  string  $template  短信模板ID
+     * @param  string  $phones    手机号
+     * @param  array   $params    短信模板参数
      * @return array
      */
-    public function send($phones, $template, $params = [])
+    public function sendSingle($template, $phone, $params = [])
     {
+        return $this->sendMulti($template, [$phone], $params);
+    }
+
+    /**
+     * 发送多个手机号
+     * 
+     * @param  string  $template  短信模板ID
+     * @param  array   $phones    手机号
+     * @param  array   $params    短信模板参数
+     * @return array
+     */
+    public function sendMulti($template, $phones, $params = [])
+    {
+        # 单次请求最多支持200个手机号
+        if (count($phones) > 200) {
+            $rest = array_splice($phones, 200);
+            $this->sendMulti($template, $rest, $params);
+        }
+
         $url = 'https://sms.tencentcloudapi.com';
 
         // 请求数据
         $data = [
-            'PhoneNumberSet' => is_string($phones) ? [$phones] : $phones,
+            'PhoneNumberSet' => $phones,
             'SmsSdkAppId' => $this->app_id,
             'SignName' => $this->sign,
             'TemplateId' => $template,

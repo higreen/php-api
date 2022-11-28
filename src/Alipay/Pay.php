@@ -2,12 +2,10 @@
 
 namespace Higreen\Api\Alipay;
 
-use Higreen\Api\Http;
-
 /**
  * 支付
  */
-class Pay extends Base
+class Pay extends A
 {
     /**
      * App支付
@@ -25,14 +23,14 @@ class Pay extends Base
     public function app($params)
     {
         // 公共请求参数
-        $data = $this->request_body;
+        $data = $this->getCommonParams();
         $data['method'] = 'alipay.trade.app.pay';
 
-        // 接口请求参数
+        // 业务请求参数
         $biz_content = [
-            'subject' => $params['subject'],
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['total_amount'],
+            'subject' => $params['subject'],
         ];
 
         // 可选参数
@@ -66,32 +64,20 @@ class Pay extends Base
      */
     public function mini($params)
     {
-        // 公共请求参数
-        $data = $this->request_body;
-        $data['method'] = 'alipay.trade.create';
-
-        // 接口请求参数
-        $biz_content = [
+        // 业务参数
+        $data = [
             'subject' => $params['subject'],
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['total_amount'],
             'buyer_id' => $params['buyer_id'],
         ];
 
-        // 获取签名
-        $data['biz_content'] = json_encode($biz_content);
-        $data['sign'] = $this->getSignature($data);
-
         // 发送请求
-        $response = Http::get([
-            'url' => $this->url,
-            'data' => $data,
-            'response_type' => 'json',
-        ]);
-        $response = $response['alipay_trade_create_response'];
-        if ($response['code'] !== '10000') {
-            throw new \ErrorException($response['sub_msg'], 555);
-        }
+        $response = $this->sendRequest('alipay.trade.create', $data);
+        // $response = $response['alipay_trade_create_response'];
+        // if ($response['code'] !== '10000') {
+        //     throw new \ErrorException($response['sub_msg'], 555);
+        // }
 
         return $response;
     }
@@ -108,12 +94,8 @@ class Pay extends Base
      */
     public function qrcode($params)
     {
-        // 公共请求参数
-        $data = $this->request_body;
-        $data['method'] = 'alipay.trade.precreate';
-
-        // 接口请求参数
-        $biz_content = [
+        // 业务参数
+        $data = [
             'subject' => $params['subject'],
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['total_amount'],
@@ -121,20 +103,11 @@ class Pay extends Base
 
         // 可选参数
         if (!empty($params['passback_params'])) {
-            $biz_content['passback_params'] = $params['passback_params'];
+            $data['passback_params'] = $params['passback_params'];
         }
 
-        // 获取签名
-        $data['biz_content'] = json_encode($biz_content);
-        $data['sign'] = $this->getSignature($data);
-
         // 发送请求
-        $response = Http::post([
-            'url' => $this->url,
-            'data' => $data,
-            'data_type' => 'form',
-        ]);
-
+        $response = $this->sendRequest('alipay.trade.precreate', $data);
         if (!empty($response['alipay_trade_precreate_response']['qr_code'])) {
             return $response['alipay_trade_precreate_response']['qr_code'];
         }

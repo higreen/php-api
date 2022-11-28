@@ -10,39 +10,41 @@ use Higreen\Api\Http;
  */
 class Pay
 {
+    /**
+     * @var string
+     */
     public $mch_id;
+
+    /**
+     * @var string
+     */
     public $mch_key;
+
+    /**
+     * @var string
+     */
     public $sslcert;
+
+    /**
+     * @var string
+     */
     public $sslkey;
 
     /**
      * Create a new instance.
      * 
      * @param array $init [
-     *  mch_id      [str] [必填] [商户ID]
-     *  mch_key_v3  [str] [必填] [商户密钥V3]
-     *  sslcert     [str] [必填] [证书路径]
-     *  sslkey      [str] [必填] [证书密钥路径]
+     *  mch_id      [string] [必填] [微信支付商户号]
+     *  mch_key     [string] [必填] [API密钥，V2和V3设置为一样的]
+     *  sslcert     [string] [必填] [证书路径]
+     *  sslkey      [string] [必填] [证书密钥路径]
      * ]
      * @return void
      */
     public function __construct($init)
     {
-        if (empty($init['mch_id'])) {
-            throw new \Exception('I need the mch_id');
-        }
-        if (empty($init['mch_key_v3'])) {
-            throw new \Exception('I need the mch_key_v3');
-        }
-        if (empty($init['sslcert']) || !file_exists($init['sslcert'])) {
-            throw new \Exception('I need the sslcert');
-        }
-        if (empty($init['sslkey']) || !file_exists($init['sslkey'])) {
-            throw new \Exception('I need the sslkey');
-        }
-
         $this->mch_id  = $init['mch_id'];
-        $this->mch_key = $init['mch_key_v3'];
+        $this->mch_key = $init['mch_key'];
         $this->sslcert = $init['sslcert'];
         $this->sslkey  = $init['sslkey'];
     }

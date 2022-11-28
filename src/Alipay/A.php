@@ -2,53 +2,64 @@
 
 namespace Higreen\Api\Alipay;
 
+use Higreen\Api\Http;
+
 /**
- * 基础类
+ * 鸡肋
  */
-class Base
+class A
 {
-    // 支付宝网关地址
-    protected $url = 'https://openapi.alipay.com/gateway.do';
-    // 应用ID
+    /**
+     * @var string
+     */
     protected $app_id;
-    // 应用秘钥
+
+    /**
+     * @var string
+     */
     protected $app_key;
-    // 公共请求参数
-    protected $request_body = [];
+
+    /**
+     * @var string
+     */
+    protected $notify_url = '';
 
     /**
      * Create a new instance.
      * 
      * @param array $init [
-     *  app_id       [str] [必填] [支付宝分配给开发者的应用ID]
-     *  app_key      [str] [必填] [应用密钥]
-     *  notify_url   [str] [必填] [支付宝服务器主动通知商户服务器里指定的页面 http/https 路径]
+     *  app_id     【string】【必填】【 支付宝分配给开发者的应用ID】
+     *  app_key    【string】【必填】【应用密钥】
+     *  notify_url 【string】【可选】【支付宝服务器主动通知商户服务器里指定的页面 http/https 路径】
      * ]
      * @return void
      */
     public function __construct($init)
     {
-        if (empty($init['app_id'])) {
-            throw new \Exception('I need the app_id');
-        }
-        if (empty($init['app_key'])) {
-            throw new \Exception('I need the app_key');
-        }
-        if (empty($init['notify_url'])) {
-            throw new \Exception('I need the notify_url');
-        }
-
+        $this->app_id = $init['app_id'];
         $this->app_key = $init['app_key'];
-        $this->request_body = [
-            'app_id'      => $init['app_id'],
+        if (isset($init['notify_url'])) {
+            $this->notify_url = $init['notify_url'];
+        }
+    }
+
+    /**
+     * 获取公共请求参数
+     */
+    protected function getCommonParams(): array
+    {
+        return [
+            'app_id'      => $this->app_id,
+            'method'      => '',
+            'format'      => 'JSON',
             'biz_content' => '',
             'charset'     => 'UTF-8',
-            'method'      => '',
-            'notify_url'  => $init['notify_url'],
-            'sign'        => '',
             'sign_type'   => 'RSA2',
+            'sign'        => '',
             'timestamp'   => date('Y-m-d H:i:s'),
             'version'     => '1.0',
+            'notify_url'  => $this->notify_url,
+            'biz_content' => '',
         ];
     }
 
@@ -76,6 +87,27 @@ class Base
         openssl_sign($data, $signature, $private_key, OPENSSL_ALGO_SHA256);
 
         return base64_encode($signature);
+    }
+
+    /**
+     * 发送请求
+     * 
+     * @param  string 接口名称
+     * @param  array  业务请求参数的集合
+     * @return array
+     */
+    protected function sendRequest($method, $biz_content)
+    {
+        $data = $this->getCommonParams();
+        $data['method'] = $method;
+        $data['biz_content'] = json_encode($biz_content, JSON_UNESCAPED_UNICODE);
+        $data['sign'] = $this->getSignature($data);
+
+        return Http::post([
+            'url' => 'https://openapi.alipay.com/gateway.do',
+            'data' => $data,
+            'data_type' => 'form',
+        ]);
     }
 
     /**
