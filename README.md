@@ -468,7 +468,12 @@ $init = [
     'sign' => '短信签名',
 ];
 $Sms = new Sms($init);
-$res = $Sms->send($phones, $template, $params);
+
+# 发送单个手机号
+$res = $Sms->sendSingle($template, $phone, $params);
+
+# 发送多个手机号
+$res = $Sms->sendMulti($template, $phones, $params);
 ```
 
 <!-- tocstop -->
