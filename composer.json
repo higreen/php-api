@@ -4,8 +4,8 @@
     "description": "第三方服务，接口封装。",
     "keywords": ["green"],
     "license": "MIT",
-    "version": "1.0.0",
-    "minimum-stability": "dev",
+    "version": "1.0.1",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "authors": [
         {
