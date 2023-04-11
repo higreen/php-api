@@ -240,7 +240,7 @@ class Pay
             if (!$input) return [];
 
             $input = json_decode($input, true);
-            $resource = $input['resource'];
+            $resource = $input['resource'] ?? [];
         }
 
         $ciphertext = $resource['ciphertext'] ?? '';
